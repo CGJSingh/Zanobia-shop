@@ -1,0 +1,8 @@
+# Logo Images Folder
+
+Add your logo and branding images here.
+
+Recommended formats:
+- Logo: SVG (scalable)
+- Favicon: ICO or PNG
+- Social media icons: PNG

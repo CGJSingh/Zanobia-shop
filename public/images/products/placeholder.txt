@@ -1,0 +1,13 @@
+# Product Images Folder
+
+Add your product images here. 
+
+Recommended naming convention:
+- product-[name]-1.jpg
+- product-[name]-2.jpg
+- etc.
+
+Example:
+- product-laptop-1.jpg
+- product-phone-1.jpg
+- product-headphones-1.jpg

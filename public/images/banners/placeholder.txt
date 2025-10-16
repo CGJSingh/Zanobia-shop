@@ -1,0 +1,8 @@
+# Banner Images Folder
+
+Add your banner and hero images here.
+
+Recommended sizes:
+- Hero banners: 1920x600px
+- Promotional banners: 1200x400px
+- Category banners: 800x300px
