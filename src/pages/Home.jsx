@@ -99,12 +99,12 @@ const Home = () => {
             <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
               <div className="space-y-6">
                 <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-                  The Best Natural
-                  <span className="block text-green-400">Coconut Charcoal</span>
+                  Premium Hookahs &
+                  <span className="block text-green-400">Natural Coconut Charcoal</span>
                 </h1>
                 
                 <p className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto">
-                  Premium quality hookah charcoal for the longest, most satisfying smoking experience
+                  Discover our finest collection of hookahs, accessories, and premium natural charcoal – delivering the ultimate smoking experience since 1999
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
