@@ -40,7 +40,7 @@ jobs:
       - name: Build React app
         run: npm run build
       
-      # 6. Deploy to Bluehost via FTP (ROOT DOMAIN)
+      # 6. Deploy to Bluehost via FTP (website_1b2a8b7a directory)
       - name: Deploy to Bluehost
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -48,7 +48,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /
+          server-dir: website_1b2a8b7a/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
@@ -68,7 +68,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./wordpress-plugin/
-          server-dir: wp-content/plugins/zanobia-business-accounts/
+          server-dir: website_1b2a8b7a/wp-content/plugins/zanobia-business-accounts/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
