@@ -68,7 +68,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./wordpress-plugin/
-          server-dir: /public_html/wp-content/plugins/zanobia-business-accounts/
+          server-dir: wp-content/plugins/zanobia-business-accounts/
           dangerous-clean-slate: false
           exclude: |
             **/.git*

@@ -2,18 +2,24 @@
   RewriteEngine On
   RewriteBase /
   
-  # Allow WordPress admin and API access
-  RewriteRule ^wp-admin - [L]
-  RewriteRule ^wp-login\.php - [L]
-  RewriteRule ^wp-json - [L]
-  RewriteRule ^wp-content - [L]
-  RewriteRule ^wp-includes - [L]
+  # Allow WordPress files and directories to pass through
+  RewriteRule ^wp-admin/ - [L]
+  RewriteRule ^wp-includes/ - [L]
+  RewriteRule ^wp-content/ - [L]
   
-  # React app routing
-  RewriteRule ^index\.html$ - [L]
+  # Allow WordPress PHP files to execute
+  RewriteRule ^wp-login\.php$ - [L]
+  RewriteRule ^wp-cron\.php$ - [L]
+  RewriteRule ^xmlrpc\.php$ - [L]
+  RewriteRule ^index\.php$ - [L]
+  
+  # WordPress API and JSON endpoints - pass to index.php
+  RewriteRule ^wp-json/(.*)$ index.php?rest_route=/$1 [QSA,L]
+  
+  # React app routing - only for non-WordPress requests
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteCond %{REQUEST_URI} !^/wp-
   RewriteRule . /index.html [L]
 </IfModule>
 
