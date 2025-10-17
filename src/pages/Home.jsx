@@ -30,7 +30,7 @@ const Home = () => {
         setLoading(true);
         setError(null);
         
-        // Fetch products from different categories for variety (v1.0.1)
+        // Fetch products from different categories for variety (v1.0.2)
         const [fetchedProducts] = await Promise.all([
           getProducts({ 
             per_page: 20, // Fetch more for better variety
