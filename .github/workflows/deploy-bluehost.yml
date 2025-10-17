@@ -1,0 +1,84 @@
+name: Deploy to Bluehost
+
+on:
+  push:
+    branches:
+      - main  # Triggers on push to main branch
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      
+      # 4. Create production environment file
+      - name: Create .env.production
+        run: |
+          echo "VITE_WOOCOMMERCE_URL=${{ secrets.VITE_WOOCOMMERCE_URL }}" > .env.production
+          echo "VITE_WOOCOMMERCE_CONSUMER_KEY=${{ secrets.VITE_WOOCOMMERCE_CONSUMER_KEY }}" >> .env.production
+          echo "VITE_WOOCOMMERCE_CONSUMER_SECRET=${{ secrets.VITE_WOOCOMMERCE_CONSUMER_SECRET }}" >> .env.production
+          echo "VITE_WORDPRESS_URL=${{ secrets.VITE_WORDPRESS_URL }}" >> .env.production
+          echo "VITE_JWT_AUTH_URL=${{ secrets.VITE_JWT_AUTH_URL }}" >> .env.production
+          echo "VITE_STRIPE_PUBLISHABLE_KEY=${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}" >> .env.production
+      
+      # 5. Build the React app
+      - name: Build React app
+        run: npm run build
+      
+      # 6. Deploy to Bluehost via FTP
+      - name: Deploy to Bluehost
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /public_html/website_1b2a8b7a/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.env*
+      
+      # 7. Upload WordPress plugin (if changed)
+      - name: Deploy WordPress Plugin
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./wordpress-plugin/
+          server-dir: /public_html/wp-content/plugins/zanobia-business-accounts/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+      
+      # 8. Notify deployment status
+      - name: Deployment Success
+        if: success()
+        run: |
+          echo "✅ Deployment to Bluehost successful!"
+          echo "🌐 Your site should be live at: https://www.zanobiaonline.com"
+      
+      - name: Deployment Failed
+        if: failure()
+        run: |
+          echo "❌ Deployment failed. Check the logs above for details."
+
