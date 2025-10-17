@@ -1,6 +1,3 @@
-# Serve React app's index.html by default (not WordPress index.php)
-DirectoryIndex index.html index.php
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -9,25 +6,26 @@ DirectoryIndex index.html index.php
   RewriteCond %{HTTP_HOST} ^zanobiaonline\.com [NC]
   RewriteRule ^(.*)$ https://www.zanobiaonline.com/$1 [R=301,L]
   
-  # Allow WordPress files and directories to pass through
+  # CRITICAL: Serve React app at root (before WordPress catches it)
+  RewriteRule ^$ /index.html [L]
+  RewriteRule ^index\.html$ - [L]
+  
+  # Allow WordPress admin, login, and core files
   RewriteRule ^wp-admin/ - [L]
   RewriteRule ^wp-includes/ - [L]
   RewriteRule ^wp-content/ - [L]
-  
-  # Allow WordPress PHP files to execute
   RewriteRule ^wp-login\.php$ - [L]
   RewriteRule ^wp-cron\.php$ - [L]
   RewriteRule ^xmlrpc\.php$ - [L]
-  RewriteRule ^index\.php$ - [L]
   
-  # WordPress API and JSON endpoints - pass to index.php
-  RewriteRule ^wp-json/(.*)$ index.php?rest_route=/$1 [QSA,L]
+  # WordPress API - explicitly pass to index.php with query string
+  RewriteRule ^wp-json/(.*)$ /index.php?rest_route=/$1 [QSA,L]
   
-  # React app routing - only for non-WordPress requests
+  # React app routing for all other non-WordPress, non-file requests
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !^/wp-
-  RewriteRule . /index.html [L]
+  RewriteRule ^(.*)$ /index.html [L]
 </IfModule>
 
 # CORS Headers for API access
