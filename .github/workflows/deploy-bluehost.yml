@@ -40,25 +40,25 @@ jobs:
       - name: Build React app
         run: npm run build
       
-      # 6. Deploy to Bluehost via FTP (website_1b2a8b7a directory)
-      - name: Deploy to Bluehost
+      # 6. Deploy React app to Bluehost (website_1b2a8b7a directory)
+      - name: Deploy React App to Bluehost
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: website_1b2a8b7a/
+          server-dir: /public_html/website_1b2a8b7a/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
-            **/.git*/**
             **/node_modules/**
             **/.env*
             **/wp-admin/**
             **/wp-content/**
             **/wp-includes/**
-            **/*.php
+            **/index.php
+            **/wp-*.php
       
       # 7. Upload WordPress plugin (if changed)
       - name: Deploy WordPress Plugin
@@ -68,11 +68,10 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./wordpress-plugin/
-          server-dir: website_1b2a8b7a/wp-content/plugins/zanobia-business-accounts/
+          server-dir: /public_html/website_1b2a8b7a/wp-content/plugins/zanobia-business-accounts/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
-            **/.git*/**
       
       # 8. Notify deployment status
       - name: Deployment Success
