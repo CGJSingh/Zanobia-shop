@@ -40,7 +40,7 @@ jobs:
       - name: Build React app
         run: npm run build
       
-      # 6. Deploy to Bluehost via FTP
+      # 6. Deploy to Bluehost via FTP (ROOT DOMAIN)
       - name: Deploy to Bluehost
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -48,13 +48,17 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /public_html/website_1b2a8b7a/
+          server-dir: /
           dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/.env*
+            **/wp-admin/**
+            **/wp-content/**
+            **/wp-includes/**
+            **/*.php
       
       # 7. Upload WordPress plugin (if changed)
       - name: Deploy WordPress Plugin
