@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
   
+  # Force WWW (redirect non-www to www for consistent CORS)
+  RewriteCond %{HTTP_HOST} ^zanobiaonline\.com [NC]
+  RewriteRule ^(.*)$ https://www.zanobiaonline.com/$1 [R=301,L]
+  
   # Allow WordPress files and directories to pass through
   RewriteRule ^wp-admin/ - [L]
   RewriteRule ^wp-includes/ - [L]
@@ -21,6 +25,17 @@
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !^/wp-
   RewriteRule . /index.html [L]
+</IfModule>
+
+# CORS Headers for API access
+<IfModule mod_headers.c>
+  # Allow CORS for API endpoints
+  <FilesMatch "\.(php)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header set Access-Control-Allow-Credentials "true"
+  </FilesMatch>
 </IfModule>
 
 # Enable GZIP compression
